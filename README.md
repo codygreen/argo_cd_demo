@@ -76,7 +76,7 @@ export INGRESSIP=$(kubectl get ingress -o jsonpath="{.items[0].status.loadBalanc
 
 ### Check your podinfo ingress
 ```bash
-curl -H "Host: example.com" $INGRESSIP
+curl -H "Host: podinfo.codygreen.local" $INGRESSIP
 ```
 
 You should see output like this:

@@ -8,3 +8,24 @@ metadata:
 stringData:
   type: git
   url: https://github.com/codygreen/argo_cd_demo
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-cd-demo
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    path: podinfo
+    repoURL: https://github.com/codygreen/argo_cd_demo.git
+    targetRevision: HEAD
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true

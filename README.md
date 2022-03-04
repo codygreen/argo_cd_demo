@@ -40,6 +40,8 @@ helm install prometheus prometheus-community/prometheus
 kubectl apply -f setup/prometheus-ingress.yaml
 ```
 
+You can check the upstream server requests with `nginx_ingress_nginxplus_upstream_server_requests`
+
 ### Install and configure Argo CD
 #### Install Argo CD
 ```bash

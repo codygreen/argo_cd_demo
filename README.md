@@ -17,13 +17,14 @@ helm install main nginx-stable/nginx-ingress \
 
 ```bash
 docker login
-kubectl create secret docker-registry regcred \
+kubectl create namespace nginx-ingress
+kubectl create secret -n nginx-ingress docker-registry regcred \
   --docker-server=docker.io \
   --docker-username=${DOCKER_USERNAME} \ 
   --docker-password=${DOCKER_PAT} \ 
   --docker-email=${DOCKER_EMAIL}
 helm repo add nginx-stable https://helm.nginx.com/stable
-helm install nginx-plus-ingress nginx-stable/nginx-ingress \
+helm install nginx-plus-ingress -n nginx-ingress nginx-stable/nginx-ingress \
   --set controller.image.repository=docker.io/codygreen/nginx-plus-ingress \
   --set controller.image.tag=latest \
   --set controller.serviceAccount.imagePullSecretName=regcred \

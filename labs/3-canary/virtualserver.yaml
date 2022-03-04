@@ -1,0 +1,22 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: podinfo
+spec:
+  host: podinfo.codygreen.local
+  upstreams:
+  - name: podinfo
+    service: podinfo
+    port: 80
+  - name: podinfov2
+    service: podinfov2
+    port: 80
+  routes:
+  - path: /
+    splits:
+    - weight: 80
+      action:
+        pass: podinfo
+    - weight: 20
+      action:
+        pass: podinfov2

@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "prometheus.codygreen.local"
+      http:
+        paths:
+          - backend:
+              service:
+                name: prometheus-server
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

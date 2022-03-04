@@ -28,7 +28,16 @@ helm install nginx-plus-ingress -n nginx-ingress nginx-stable/nginx-ingress \
   --set controller.image.repository=docker.io/codygreen/nginx-plus-ingress \
   --set controller.image.tag=latest \
   --set controller.serviceAccount.imagePullSecretName=regcred \
-  --set controller.nginxplus=true
+  --set controller.nginxplus=true \
+  --set controller.nginxStatus.allowCidrs=0.0.0.0/0
+```
+### Install Prometheus
+```bash
+# Install prometheus
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install prometheus prometheus-community/prometheus
+# create prometheus-server ingress
+kubectl apply -f setup/prometheus-ingress.yaml
 ```
 
 ### Install and configure Argo CD
@@ -54,6 +63,7 @@ You can now login to the Argo CD dashboard using the port forwarding information
 ```bash
 kubectl apply -f setup/argo_cd_demo.yaml
 ```
+
 
 ## Test Application
 

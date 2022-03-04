@@ -1,11 +1,33 @@
 # Argo CD Demo
 
 ## Setup
-### Install NGINX Ingress
+
+### Install NGINX Ingress Controller
+For this setup, you can use NGINX Ingress or NGINX Plus Ingress
+
+#### Install NGINX Ingress
 ```bash
 helm repo add nginx-stable https://helm.nginx.com/stable
 helm install main nginx-stable/nginx-ingress \
   --set controller.watchIngressWithoutClass=true
+```
+
+#### Install NGINX Plus Ingress
+> Note: You'll need to pull the NGINX Plus Ingress Controller from your private registry
+
+```bash
+docker login
+kubectl create secret docker-registry regcred \
+  --docker-server=docker.io \
+  --docker-username=${DOCKER_USERNAME} \ 
+  --docker-password=${DOCKER_PAT} \ 
+  --docker-email=${DOCKER_EMAIL}
+helm repo add nginx-stable https://helm.nginx.com/stable
+helm install nginx-plus-ingress nginx-stable/nginx-ingress \
+  --set controller.image.repository=docker.io/codygreen/nginx-plus-ingress \
+  --set controller.image.tag=latest \
+  --set controller.serviceAccount.imagePullSecretName=regcred \
+  --set controller.nginxplus=true
 ```
 
 ### Install and configure Argo CD
@@ -25,6 +47,8 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 ```
+You can now login to the Argo CD dashboard using the port forwarding information and the password.
+
 #### Configure the podinfo application
 ```bash
 kubectl apply -f setup/argo_cd_demo.yaml
